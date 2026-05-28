@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Off The Books</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;0,900;1,400;1,700&family=DM+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root { --black: #080808; --off-black: #0F0F0F; --dark: #141414; --card: #111111; --border: rgba(255,255,255,0.09); --border-bright: rgba(255,255,255,0.18); --text-primary: #EDE9E0; --text-secondary: #B0AA9E; --text-tertiary: #7A7570; --accent: #C8A96A; --red: #C84A3A; --green: #4A9E6A; }
+  html { scroll-behavior: smooth; }
+  body { background: var(--black); color: var(--text-primary); font-family: 'DM Sans', sans-serif; font-weight: 300; line-height: 1.6; overflow-x: hidden; margin: 0; padding: 0; }
+  nav { display: flex; align-items: center; justify-content: space-between; padding: 0 2.5rem; height: 56px; border-bottom: 0.5px solid var(--border); background: rgba(8,8,8,0.97); position: sticky; top: 0; z-index: 50; backdrop-filter: blur(16px); }
+  .nav-left { display: flex; align-items: center; gap: 2rem; }
+  .logo-mark { display: flex; align-items: center; gap: 10px; }
+  .logo-wordmark { display: flex; flex-direction: column; line-height: 1; }
+  .logo-top { font-family: 'Playfair Display', serif; font-size: 14px; font-weight: 700; color: var(--text-primary); letter-spacing: 0.04em; }
+  .logo-bottom { font-family: 'DM Mono', monospace; font-size: 8px; color: var(--accent); letter-spacing: 0.18em; text-transform: uppercase; margin-top: 1px; }
+  .nav-date { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-tertiary); letter-spacing: 0.08em; text-transform: uppercase; }
+  .nav-cta { background: var(--accent); color: var(--black); font-family: 'DM Mono', monospace; font-size: 10px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 8px 16px; border: none; cursor: pointer; transition: opacity 0.2s; text-decoration: none; display: inline-block; }
+  .nav-cta:hover { opacity: 0.85; }
+  .ticker-wrap { overflow: hidden; background: var(--off-black); border-bottom: 0.5px solid var(--border); padding: 10px 0; white-space: nowrap; }
+  .ticker { display: inline-flex; animation: scroll 50s linear infinite; }
+  .tick { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-secondary); letter-spacing: 0.07em; padding: 0 2rem; display: flex; align-items: center; gap: 0.5rem; }
+  .tick-label { color: var(--accent); }
+  .tick-down { color: var(--red); }
+  .tick-up { color: var(--green); }
+  @keyframes scroll { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+  .hero-grid { display: grid; grid-template-columns: 1fr 340px; border-bottom: 0.5px solid var(--border); min-height: 520px; }
+  .hero-main { padding: 3.5rem 3rem; border-right: 0.5px solid var(--border); display: flex; flex-direction: column; justify-content: space-between; }
+  .hero-kicker { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--accent); letter-spacing: 0.14em; text-transform: uppercase; margin-bottom: 1.5rem; opacity: 0; animation: up 0.7s ease forwards 0.1s; }
+  .hero-hed { font-family: 'Playfair Display', serif; font-size: clamp(36px, 4.5vw, 62px); font-weight: 900; line-height: 1.06; letter-spacing: -0.02em; margin-bottom: 1.5rem; opacity: 0; animation: up 0.7s ease forwards 0.25s; }
+  .hero-hed em { font-style: italic; color: var(--accent); }
+  .hero-dek { font-size: 16px; color: var(--text-secondary); line-height: 1.75; max-width: 520px; margin-bottom: 2.5rem; opacity: 0; animation: up 0.7s ease forwards 0.4s; }
+  .hero-dek strong { color: var(--text-primary); font-weight: 500; }
+  .signup-wrap { opacity: 0; animation: up 0.7s ease forwards 0.55s; }
+  .signup-row { display: flex; gap: 0; max-width: 440px; margin-bottom: 10px; }
+  .signup-row input { flex: 1; background: var(--dark); border: 0.5px solid var(--border-bright); border-right: none; color: var(--text-primary); font-family: 'DM Sans', sans-serif; font-size: 13px; padding: 13px 16px; outline: none; transition: border-color 0.2s; }
+  .signup-row input:focus { border-color: var(--accent); }
+  .signup-row input::placeholder { color: var(--text-tertiary); }
+  .signup-row button { background: var(--accent); color: var(--black); border: none; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 13px 20px; cursor: pointer; white-space: nowrap; transition: opacity 0.2s; }
+  .signup-row button:hover { opacity: 0.85; }
+  .signup-note { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-tertiary); letter-spacing: 0.06em; }
+  .signup-note span { color: var(--accent); }
+  .hero-sidebar { display: flex; flex-direction: column; }
+  .sidebar-block { padding: 1.75rem; border-bottom: 0.5px solid var(--border); flex: 1; opacity: 0; animation: up 0.7s ease forwards; }
+  .sidebar-block:nth-child(1) { animation-delay: 0.3s; }
+  .sidebar-block:nth-child(2) { animation-delay: 0.45s; }
+  .sidebar-block:nth-child(3) { animation-delay: 0.6s; }
+  .sidebar-block:last-child { border-bottom: none; }
+  .sb-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--text-tertiary); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .sb-number { font-family: 'Playfair Display', serif; font-size: 34px; font-weight: 900; line-height: 1; margin-bottom: 0.3rem; }
+  .sb-number.red { color: var(--red); }
+  .sb-number.gold { color: var(--accent); }
+  .sb-desc { font-size: 12px; color: var(--text-secondary); line-height: 1.5; }
+  .sb-source { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--text-tertiary); margin-top: 6px; letter-spacing: 0.04em; }
+  .sec-div { display: flex; align-items: center; gap: 1rem; padding: 1.25rem 2.5rem; border-bottom: 0.5px solid var(--border); background: var(--off-black); }
+  .sec-div-label { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-tertiary); letter-spacing: 0.12em; text-transform: uppercase; white-space: nowrap; }
+  .sec-div-line { flex: 1; height: 0.5px; background: var(--border); }
+  .chart-section { display: grid; grid-template-columns: 1fr 1fr; border-bottom: 0.5px solid var(--border); }
+  .chart-block { padding: 2.5rem; border-right: 0.5px solid var(--border); }
+  .chart-block:last-child { border-right: none; }
+  .chart-label { font-family: 'DM Mono', monospace; font-size: 9px; color: var(--text-tertiary); letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .chart-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 1.5rem; line-height: 1.3; }
+  .bar-chart { display: flex; flex-direction: column; gap: 10px; }
+  .bar-row { display: flex; align-items: center; gap: 12px; }
+  .bar-year { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-secondary); min-width: 32px; }
+  .bar-track { flex: 1; height: 20px; background: var(--dark); overflow: hidden; }
+  .bar-fill { height: 100%; background: var(--accent); animation: barGrow 1.2s ease forwards; opacity: 0.85; }
+  .bar-val { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-secondary); min-width: 48px; text-align: right; }
+  @keyframes barGrow { from { width: 0; } }
+  .line-chart-wrap { height: 140px; }
+  .line-chart-wrap svg { width: 100%; height: 100%; overflow: visible; }
+  .line-path { fill: none; stroke: var(--red); stroke-width: 1.5; stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: drawLine 2s ease forwards 0.5s; }
+  .line-path-wages { fill: none; stroke: var(--accent); stroke-width: 1.5; stroke-dasharray: 1000; stroke-dashoffset: 1000; animation: drawLine 2s ease forwards 0.8s; }
+  @keyframes drawLine { to { stroke-dashoffset: 0; } }
+  .chart-legend { display: flex; gap: 1.5rem; margin-top: 1rem; }
+  .legend-item { display: flex; align-items: center; gap: 6px; font-family: 'DM Mono', monospace; font-size: 9px; color: var(--text-secondary); letter-spacing: 0.06em; }
+  .legend-dot { width: 8px; height: 2px; border-radius: 1px; }
+  .wealth-section { padding: 2.5rem; border-bottom: 0.5px solid var(--border); }
+  .wealth-title { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 700; color: var(--text-primary); margin-bottom: 0.4rem; }
+  .wealth-sub { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-tertiary); margin-bottom: 1.5rem; letter-spacing: 0.06em; }
+  .wealth-bar-wrap { height: 44px; display: flex; gap: 2px; margin-bottom: 10px; }
+  .wb { display: flex; align-items: center; justify-content: center; height: 100%; font-family: 'DM Mono', monospace; font-size: 9px; letter-spacing: 0.05em; }
+  .wb-1 { background: var(--red); width: 38%; color: rgba(0,0,0,0.8); }
+  .wb-2 { background: #C87840; width: 22%; color: rgba(0,0,0,0.7); }
+  .wb-3 { background: var(--accent); width: 17.5%; color: rgba(0,0,0,0.7); }
+  .wb-4 { background: var(--green); width: 20%; color: rgba(0,0,0,0.7); }
+  .wb-5 { background: var(--text-tertiary); width: 2.5%; }
+  .wealth-labels { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-top: 10px; }
+  .wl { display: flex; align-items: center; gap: 6px; font-family: 'DM Mono', monospace; font-size: 9px; color: var(--text-secondary); }
+  .wl-dot { width: 8px; height: 8px; border-radius: 1px; flex-shrink: 0; }
+  .why-section { display: grid; grid-template-columns: 1fr 1fr 1fr; border-bottom: 0.5px solid var(--border); }
+  .why-block { padding: 2.5rem; border-right: 0.5px solid var(--border); }
+  .why-block:last-child { border-right: none; }
+  .why-num { font-family: 'Playfair Display', serif; font-size: 48px; font-weight: 900; color: var(--accent); opacity: 0.3; line-height: 1; margin-bottom: 0.75rem; }
+  .why-title { font-family: 'Playfair Display', serif; font-size: 17px; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; line-height: 1.3; }
+  .why-desc { font-size: 13px; color: var(--text-secondary); line-height: 1.65; }
+  .price-section { padding: 4rem 2.5rem; border-bottom: 0.5px solid var(--border); display: grid; grid-template-columns: 1fr 1fr; gap: 3rem; align-items: center; }
+  .price-hed { font-family: 'Playfair Display', serif; font-size: clamp(28px, 3vw, 40px); font-weight: 900; line-height: 1.15; margin-bottom: 1rem; }
+  .price-hed em { font-style: italic; color: var(--accent); }
+  .price-desc { font-size: 14px; color: var(--text-secondary); line-height: 1.7; margin-bottom: 1.5rem; }
+  .price-card { background: var(--card); border: 0.5px solid var(--border-bright); padding: 2rem; }
+  .price-tag { font-family: 'Playfair Display', serif; font-size: 52px; font-weight: 900; color: var(--text-primary); line-height: 1; margin-bottom: 0.25rem; }
+  .price-period { font-family: 'DM Mono', monospace; font-size: 11px; color: var(--text-tertiary); letter-spacing: 0.08em; margin-bottom: 1.5rem; }
+  .price-features { list-style: none; margin-bottom: 1.5rem; }
+  .price-features li { font-size: 13px; color: var(--text-secondary); padding: 8px 0; border-bottom: 0.5px solid var(--border); display: flex; align-items: center; gap: 10px; }
+  .price-features li:last-child { border-bottom: none; }
+  .price-features li::before { content: '→'; color: var(--accent); font-family: 'DM Mono', monospace; font-size: 11px; }
+  .price-btn { width: 100%; background: var(--accent); color: var(--black); border: none; font-family: 'DM Mono', monospace; font-size: 12px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 15px; cursor: pointer; transition: opacity 0.2s; margin-bottom: 10px; display: block; text-align: center; text-decoration: none; }
+  .price-btn:hover { opacity: 0.85; }
+  .price-guarantee { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-tertiary); text-align: center; letter-spacing: 0.06em; }
+  .bottom-cta { padding: 5rem 2.5rem; text-align: center; position: relative; overflow: hidden; }
+  .bottom-cta::before { content: ''; position: absolute; top: 50%; left: 50%; transform: translate(-50%,-50%); width: 700px; height: 350px; background: radial-gradient(ellipse, rgba(200,169,106,0.05) 0%, transparent 70%); pointer-events: none; }
+  .bottom-hed { font-family: 'Playfair Display', serif; font-size: clamp(32px, 5vw, 60px); font-weight: 900; line-height: 1.1; margin-bottom: 1.25rem; }
+  .bottom-hed em { font-style: italic; color: var(--accent); }
+  .bottom-sub { font-size: 15px; color: var(--text-secondary); margin-bottom: 2.5rem; }
+  .bottom-row { display: flex; gap: 0; max-width: 400px; margin: 0 auto 10px; }
+  .bottom-row input { flex: 1; background: var(--dark); border: 0.5px solid var(--border-bright); border-right: none; color: var(--text-primary); font-family: 'DM Sans', sans-serif; font-size: 13px; padding: 14px 16px; outline: none; }
+  .bottom-row input::placeholder { color: var(--text-tertiary); }
+  .bottom-row button { background: var(--accent); color: var(--black); border: none; font-family: 'DM Mono', monospace; font-size: 11px; font-weight: 500; letter-spacing: 0.1em; text-transform: uppercase; padding: 14px 20px; cursor: pointer; white-space: nowrap; transition: opacity 0.2s; }
+  .bottom-row button:hover { opacity: 0.85; }
+  .bottom-note { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-tertiary); letter-spacing: 0.06em; }
+  .bottom-note span { color: var(--accent); }
+  footer { border-top: 0.5px solid var(--border); padding: 1.5rem 2.5rem; display: flex; justify-content: space-between; align-items: center; background: var(--off-black); }
+  .footer-note { font-family: 'DM Mono', monospace; font-size: 10px; color: var(--text-tertiary); letter-spacing: 0.06em; }
+  @keyframes up { from { opacity: 0; transform: translateY(18px); } to { opacity: 1; transform: translateY(0); } }
+  @media (max-width: 768px) { .hero-grid { grid-template-columns: 1fr; } .hero-sidebar { display: none; } .chart-section { grid-template-columns: 1fr; } .why-section { grid-template-columns: 1fr; } .price-section { grid-template-columns: 1fr; } nav { padding: 0 1.5rem; } .nav-date { display: none; } .hero-main { padding: 2rem 1.5rem; } }
+</style>
+</head>
+<body>
+<nav>
+  <div class="nav-left">
+    <div class="logo-mark">
+      <svg width="28" height="28" viewBox="0 0 32 32" fill="none"><circle cx="13" cy="13" r="9.5" stroke="#C8A96A" stroke-width="1.5"/><path d="M13 7.5V8.5M13 17.5V18.5M10.5 15.5C10.5 16.6 11.6 17.5 13 17.5C14.4 17.5 15.5 16.6 15.5 15.5C15.5 14.4 14.4 13.5 13 13.5C11.6 13.5 10.5 12.6 10.5 11.5C10.5 10.4 11.6 9.5 13 9.5C14.4 9.5 15.5 10.4 15.5 11.5" stroke="#C8A96A" stroke-width="1.2" stroke-linecap="round"/><path d="M20 20L27.5 27.5" stroke="#C8A96A" stroke-width="1.8" stroke-linecap="round"/><path d="M24 25.5L27.5 27.5L25.5 24" stroke="#C8A96A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      <div class="logo-wordmark"><span class="logo-top">Off The Books</span><span class="logo-bottom">Financial Intelligence</span></div>
+    </div>
+    <div class="nav-date">Weekly · Est. 2025</div>
+  </div>
+  <a href="#subscribe" class="nav-cta">Subscribe — $9/mo →</a>
+</nav>
+<div class="ticker-wrap"><div class="ticker">
+  <div class="tick"><span class="tick-label">INFLATION</span> US prices up 19.55% since Jan 2020</div>
+  <div class="tick"><span class="tick-label">SAVINGS</span> Avg bank rate: <span class="tick-down">0.39%</span> · Inflation: <span class="tick-down">2.8%</span></div>
+  <div class="tick"><span class="tick-label">DEBT</span> National debt grows $11.8B per day</div>
+  <div class="tick"><span class="tick-label">WEALTH</span> Billionaire wealth <span class="tick-up">+54%</span> in pandemic year one</div>
+  <div class="tick"><span class="tick-label">MARKETS</span> BlackRock + Vanguard: top shareholders in 100% of S&P 500</div>
+  <div class="tick"><span class="tick-label">INTEREST</span> US paid $1.13T in debt interest in 2024 — more than defense</div>
+  <div class="tick"><span class="tick-label">INFLATION</span> US prices up 19.55% since Jan 2020</div>
+  <div class="tick"><span class="tick-label">SAVINGS</span> Avg bank rate: <span class="tick-down">0.39%</span> · Inflation: <span class="tick-down">2.8%</span></div>
+  <div class="tick"><span class="tick-label">DEBT</span> National debt grows $11.8B per day</div>
+  <div class="tick"><span class="tick-label">WEALTH</span> Billionaire wealth <span class="tick-up">+54%</span> in pandemic year one</div>
+  <div class="tick"><span class="tick-label">MARKETS</span> BlackRock + Vanguard: top shareholders in 100% of S&P 500</div>
+  <div class="tick"><span class="tick-label">INTEREST</span> US paid $1.13T in debt interest in 2024 — more than defense</div>
+</div></div>
+<div class="hero-grid">
+  <div class="hero-main">
+    <div>
+      <div class="hero-kicker">Financial Intelligence · Weekly · $9/month</div>
+      <h1 class="hero-hed">The system isn't broken.<br><em>It works exactly<br>as designed.</em></h1>
+      <p class="hero-dek">Every week, <strong>Off The Books</strong> publishes the numbers, the names, and the mechanisms behind the financial decisions that affect your money — before the mainstream press explains them away.</p>
+    </div>
+    <div class="signup-wrap" id="subscribe">
+      <div class="signup-row">
+        <input type="email" placeholder="your@email.com">
+        <button>Subscribe →</button>
+      </div>
+      <div class="signup-note">$9/month · <span>7-day money-back guarantee</span> · Cancel anytime</div>
+    </div>
+  </div>
+  <div class="hero-sidebar">
+    <div class="sidebar-block"><div class="sb-label">Your dollar · Jan 2020 vs today</div><div class="sb-number red">−19.6%</div><div class="sb-desc">Purchasing power lost since the pandemic began. Your salary probably didn't keep up.</div><div class="sb-source">BLS / CPI-U data</div></div>
+    <div class="sidebar-block"><div class="sb-label">Billionaire wealth gain · 2020–2021</div><div class="sb-number gold">+$4T</div><div class="sb-desc">Added while 80 million Americans lost work. Same 12 months. Different outcome.</div><div class="sb-source">Institute for Policy Studies / Forbes</div></div>
+    <div class="sidebar-block"><div class="sb-label">Your share of national debt</div><div class="sb-number red">$278K</div><div class="sb-desc">Per taxpayer. Growing by $18,300 every year. Nobody asked if you agreed.</div><div class="sb-source">US Treasury / PrimeRates 2026</div></div>
+  </div>
+</div>
+<div class="sec-div"><div class="sec-div-label">The data they don't lead with</div><div class="sec-div-line"></div></div>
+<div class="chart-section">
+  <div class="chart-block">
+    <div class="chart-label">Wealth concentration · USA · 2020–2025</div>
+    <div class="chart-title">Billionaire wealth grew every single year. Without exception.</div>
+    <div class="bar-chart">
+      <div class="bar-row"><div class="bar-year">2020</div><div class="bar-track"><div class="bar-fill" style="width:52%"></div></div><div class="bar-val">$2.95T</div></div>
+      <div class="bar-row"><div class="bar-year">2021</div><div class="bar-track"><div class="bar-fill" style="width:78%"></div></div><div class="bar-val">$4.56T</div></div>
+      <div class="bar-row"><div class="bar-year">2022</div><div class="bar-track"><div class="bar-fill" style="width:84%"></div></div><div class="bar-val">$4.90T</div></div>
+      <div class="bar-row"><div class="bar-year">2023</div><div class="bar-track"><div class="bar-fill" style="width:91%"></div></div><div class="bar-val">$5.3T</div></div>
+      <div class="bar-row"><div class="bar-year">2024</div><div class="bar-track"><div class="bar-fill" style="width:100%"></div></div><div class="bar-val">$5.8T</div></div>
+    </div>
+    <div class="sb-source" style="margin-top:1rem">Forbes World's Billionaires / Americans for Tax Fairness</div>
+  </div>
+  <div class="chart-block">
+    <div class="chart-label">Real wages vs inflation · USA · 2020–2025</div>
+    <div class="chart-title">For 25 consecutive months, inflation outpaced wages. A silent pay cut.</div>
+    <div class="line-chart-wrap">
+      <svg viewBox="0 0 400 120" preserveAspectRatio="none">
+        <line x1="0" y1="30" x2="400" y2="30" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+        <line x1="0" y1="60" x2="400" y2="60" stroke="rgba(255,255,255,0.1)" stroke-width="0.5" stroke-dasharray="4,4"/>
+        <line x1="0" y1="90" x2="400" y2="90" stroke="rgba(255,255,255,0.04)" stroke-width="0.5"/>
+        <path class="line-path" d="M0,70 C30,68 60,55 90,35 C120,15 150,10 180,18 C210,26 240,42 270,55 C300,65 330,62 370,60 L400,60"/>
+        <path class="line-path-wages" d="M0,65 C30,63 60,62 90,58 C120,52 150,50 180,55 C210,60 240,62 270,60 C300,58 330,56 370,55 L400,54"/>
+        <text x="185" y="12" font-family="DM Mono" font-size="8" fill="#C84A3A" opacity="0.9">INFLATION PEAK 9.1%</text>
+        <text x="8" y="110" font-family="DM Mono" font-size="7" fill="rgba(255,255,255,0.3)">2020</text>
+        <text x="180" y="110" font-family="DM Mono" font-size="7" fill="rgba(255,255,255,0.3)">2022</text>
+        <text x="355" y="110" font-family="DM Mono" font-size="7" fill="rgba(255,255,255,0.3)">2025</text>
+      </svg>
+    </div>
+    <div class="chart-legend">
+      <div class="legend-item"><div class="legend-dot" style="background:var(--red)"></div>Inflation rate</div>
+      <div class="legend-item"><div class="legend-dot" style="background:var(--accent)"></div>Wage growth</div>
+    </div>
+    <div class="sb-source" style="margin-top:0.75rem">BLS / USAFacts / Statista</div>
+  </div>
+</div>
+<div class="wealth-section">
+  <div class="chart-label">US wealth distribution · 2025</div>
+  <div class="wealth-title">The top 1% own 38% of everything. The bottom 50% own 2.5%.</div>
+  <div class="wealth-sub">Federal Reserve Distributional Financial Accounts · 2025</div>
+  <div class="wealth-bar-wrap">
+    <div class="wb wb-1">Top 1% · 38%</div><div class="wb wb-2">Next 9% · 22%</div><div class="wb wb-3">Next 40% · 17.5%</div><div class="wb wb-4">Next 40% · 20%</div><div class="wb wb-5"></div>
+  </div>
+  <div class="wealth-labels">
+    <div class="wl"><div class="wl-dot" style="background:var(--red)"></div>Top 1% — 38%</div>
+    <div class="wl"><div class="wl-dot" style="background:#C87840"></div>Next 9% — 22%</div>
+    <div class="wl"><div class="wl-dot" style="background:var(--accent)"></div>Next 40% — 17.5%</div>
+    <div class="wl"><div class="wl-dot" style="background:var(--green)"></div>Next 40% — 20%</div>
+    <div class="wl"><div class="wl-dot" style="background:var(--text-tertiary)"></div>Bottom 50% — 2.5%</div>
+  </div>
+</div>
+<div class="sec-div"><div class="sec-div-label">What you get every week</div><div class="sec-div-line"></div></div>
+<div class="why-section">
+  <div class="why-block"><div class="why-num">01</div><div class="why-title">One number that changes how you see the week</div><div class="why-desc">A single verified statistic with full context. Where it came from, who benefits, and what it means for your money.</div></div>
+  <div class="why-block"><div class="why-num">02</div><div class="why-title">Follow the money — who won this week</div><div class="why-desc">Every major financial event has winners. We name them, trace the mechanism, and explain why the headline missed the point.</div></div>
+  <div class="why-block"><div class="why-num">03</div><div class="why-title">One thing you can actually do</div><div class="why-desc">Not generic advice. One specific, actionable move based on what we covered that week. Information without action is just noise.</div></div>
+</div>
+<div class="sec-div"><div class="sec-div-label">Subscription</div><div class="sec-div-line"></div></div>
+<div class="price-section">
+  <div>
+    <h2 class="price-hed">Intelligence<br>has a <em>price.</em><br>Ignorance costs more.</h2>
+    <p class="price-desc">The financial press is free because it is funded by the people it covers. Off The Books is funded by readers. That changes what we can say — and who we say it about.</p>
+    <p class="price-desc" style="color:var(--text-tertiary);font-size:13px;">No ads. No sponsors. No financial products to sell you. Just the numbers and what they mean.</p>
+  </div>
+  <div>
+    <div class="price-card">
+      <div class="price-tag">$9</div>
+      <div class="price-period">Per month · Billed monthly · Cancel anytime</div>
+      <ul class="price-features">
+        <li>Full weekly issue every Tuesday</li>
+        <li>Complete archive access from day one</li>
+        <li>The numbers the press buried this week</li>
+        <li>One actionable move per issue</li>
+        <li>No ads. Ever.</li>
+      </ul>
+      <a href="#subscribe" class="price-btn">Start reading — $9/month →</a>
+      <div class="price-guarantee">7-day money-back guarantee · No questions asked</div>
+    </div>
+  </div>
+</div>
+<section class="bottom-cta">
+  <h2 class="bottom-hed">Are you<br><em>paying attention?</em></h2>
+  <p class="bottom-sub">The people who profit from your confusion are counting on you not to be.</p>
+  <div class="bottom-row">
+    <input type="email" placeholder="your@email.com">
+    <button>Subscribe →</button>
+  </div>
+  <div class="bottom-note">$9/month · <span>7-day guarantee</span> · Cancel anytime</div>
+</section>
+<footer>
+  <div class="logo-mark">
+    <svg width="20" height="20" viewBox="0 0 32 32" fill="none"><circle cx="13" cy="13" r="9.5" stroke="#C8A96A" stroke-width="1.5"/><path d="M13 7.5V8.5M13 17.5V18.5M10.5 15.5C10.5 16.6 11.6 17.5 13 17.5C14.4 17.5 15.5 16.6 15.5 15.5C15.5 14.4 14.4 13.5 13 13.5C11.6 13.5 10.5 12.6 10.5 11.5C10.5 10.4 11.6 9.5 13 9.5C14.4 9.5 15.5 10.4 15.5 11.5" stroke="#C8A96A" stroke-width="1.2" stroke-linecap="round"/><path d="M20 20L27.5 27.5" stroke="#C8A96A" stroke-width="1.8" stroke-linecap="round"/><path d="M24 25.5L27.5 27.5L25.5 24" stroke="#C8A96A" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    <span style="font-family:'Playfair Display',serif;font-size:13px;font-weight:700;color:var(--text-primary);margin-left:8px;">Off The Books</span>
+  </div>
+  <div class="footer-note">Weekly financial intelligence · © 2025 Off The Books</div>
+</footer>
+</body>
+</html>
